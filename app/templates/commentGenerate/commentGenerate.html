@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>评论生成器</title>
+
+    <!-- 引入本地 Bootstrap CSS 文件 -->
+    <link href="{{ url_for('static', filename='bootstrap-3.3.5/css/bootstrap.min.css') }}" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        .form-section {
+            margin-bottom: 20px;
+        }
+
+        .output-box {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            margin-top: 20px;
+            height: 150px;
+            overflow-y: auto;
+        }
+
+        .btn-custom {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1 class="text-center">评论生成器</h1>
+
+        <!-- 热点新闻展示 -->
+        <div class="row form-section">
+            <div class="col-md-12">
+                <h3>热点新闻</h3>
+                <button class="btn btn-info" id="fetch-hot-news-btn">爬取热点新闻</button>
+                <div class="output-box" id="hot-news-box">
+                    热点新闻将在这里显示...
+                </div>
+            </div>
+        </div>
+
+        <!-- 评论生成 -->
+        <div class="row form-section">
+            <div class="col-md-12">
+                <button class="btn btn-primary w-100 btn-custom" id="generate-comment-btn">生成评论</button>
+                <div class="output-box" id="comment-box">
+                    生成的评论将在这里显示...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入本地 Bootstrap JS 文件 -->
+    <script src="{{ url_for('static', filename='bootstrap-3.3.5/js/bootstrap.min.js') }}"></script>
+
+    <script>
+        // 爬取热点新闻按钮点击事件
+        document.getElementById('fetch-hot-news-btn').addEventListener('click', function() {
+            // 向后端发起GET请求，获取热点新闻
+            fetch('/fetch_hot_news')
+                .then(response => response.json())
+                .then(data => {
+                    // 显示热点新闻
+                    document.getElementById('hot-news-box').innerHTML = data.hot_news.join('<br>');
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        // 生成评论按钮点击事件
+        document.getElementById('generate-comment-btn').addEventListener('click', function() {
+            // 向后端发起请求，获取生成的评论
+            fetch('/generate_comment')
+                .then(response => response.json())
+                .then(data => {
+                    // 显示生成的评论
+                    document.getElementById('comment-box').textContent = data.comment;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+    </script>
+</body>
+
+</html>

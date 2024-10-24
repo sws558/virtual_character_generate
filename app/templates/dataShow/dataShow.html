@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据可视化展示</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #chart {
+            width: 100%;
+            height: 600px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1 class="text-center mt-5">数据库信息可视化展示</h1>
+        <div id="chart"></div>
+    </div>
+
+    <script>
+        // 使用 JavaScript 获取数据库信息并渲染图表
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('/get_portrait_data')
+                .then(response => response.json())
+                .then(data => {
+                    // 准备数据进行可视化
+                    let ageData = {};
+                    let genderData = { 男性: 0, 女性: 0 };
+
+                    data.forEach(portrait => {
+                        // 年龄统计
+                        if (ageData[portrait.age]) {
+                            ageData[portrait.age]++;
+                        } else {
+                            ageData[portrait.age] = 1;
+                        }
+                        // 性别统计
+                        if (portrait.gender === '男性') {
+                            genderData['男性']++;
+                        } else if (portrait.gender === '女性') {
+                            genderData['女性']++;
+                        }
+                    });
+
+                    // 转换数据格式
+                    const ageCategories = Object.keys(ageData);
+                    const ageValues = Object.values(ageData);
+                    const genderCategories = Object.keys(genderData);
+                    const genderValues = Object.values(genderData);
+
+                    // 初始化 ECharts
+                    var chartDom = document.getElementById('chart');
+                    var myChart = echarts.init(chartDom);
+                    var option;
+
+                    // 设置 ECharts 配置
+                    option = {
+                        title: {
+                            text: '虚拟人物数据可视化'
+                        },
+                        tooltip: {
+                            trigger: 'axis'
+                        },
+                        legend: {
+                            data: ['年龄分布', '性别分布']
+                        },
+                        xAxis: [
+                            {
+                                type: 'category',
+                                data: ageCategories,
+                                name: '年龄',
+                            },
+                            {
+                                type: 'category',
+                                data: genderCategories,
+                                name: '性别',
+                            }
+                        ],
+                        yAxis: {
+                            type: 'value',
+                            name: '人数'
+                        },
+                        series: [
+                            {
+                                name: '年龄分布',
+                                type: 'bar',
+                                data: ageValues
+                            },
+                            {
+                                name: '性别分布',
+                                type: 'bar',
+                                xAxisIndex: 1,
+                                data: genderValues
+                            }
+                        ]
+                    };
+
+                    // 使用指定的配置项和数据显示图表
+                    myChart.setOption(option);
+                })
+                .catch(error => console.error('获取数据失败:', error));
+        });
+    </script>
+
+</body>
+
+</html>

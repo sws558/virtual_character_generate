@@ -1,0 +1,15 @@
+DEBUG = False
+WTF_CSRF_ENABLED = False
+APP_MODEL_DIR = './app/model/save_model'
+SECRET_KEY = '!@#$%8F6F98EC3684AECA1DC44E1CB816E4A5^&*()'
+UPLOAD_FOLDER = './store/pcap/'
+FILE_FOLDER = './store/files/'
+PDF_FOLDER = './store/files/pdf/'
+WEB_FLODER = './store/files/Web/'
+ALL_FLODER = './store/files/All/'
+MAIL_FLODER = './store/files/Mail/'
+FTP_FLODER = './store/files/Ftp/'
+CSV_FLODER = './store/files/csv/'
+FLOWMETER_FLODER = './assets/flowmeter/'
+MODEL_DIR = './assets/ML/pickles/'
+MODEL_PATH = './assets/ML/pickles/LogReg_1.pkl'

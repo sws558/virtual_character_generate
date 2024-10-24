@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文本生成器</title>
+
+    <!-- 引入本地 Bootstrap CSS 文件 -->
+    <link href="{{ url_for('static', filename='bootstrap-3.3.5/css/bootstrap.min.css') }}" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        .form-section {
+            margin-bottom: 20px;
+        }
+
+        .output-box {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            margin-top: 20px;
+            height: 150px;
+            overflow-y: auto;
+        }
+
+        .btn-custom {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="text-center">文本生成器</h1>
+
+        <div class="row form-section">
+            <!-- 生成类型参数 -->
+            <div class="col-md-6">
+                <label for="generation-type" class="form-label">生成类型</label>
+                <select id="generation-type" class="form-control">
+                    <option value="1">纯文本</option>
+                    <option value="2">图文</option>
+                </select>
+            </div>
+
+            <!-- 情感 -->
+            <div class="col-md-6">
+                <label for="emotion" class="form-label">情感</label>
+                <input type="text" id="emotion" class="form-control" placeholder="输入情感...">
+            </div>
+        </div>
+
+        <div class="row form-section">
+            <!-- 主题 -->
+            <div class="col-md-6">
+                <label for="theme" class="form-label">主题</label>
+                <input type="text" id="theme" class="form-control" placeholder="输入主题...">
+            </div>
+
+            <!-- 用户ID (下拉框) -->
+            <div class="col-md-6">
+                <label for="user" class="form-label">用户ID</label>
+                <select id="user" class="form-control">
+                    <!-- 用户ID将通过 JS 动态加载 -->
+                </select>
+            </div>
+        </div>
+
+        <!-- 生成按钮 -->
+        <button class="btn btn-primary w-100 btn-custom" id="generate-btn">生成文本</button>
+
+        <!-- 输出框 -->
+        <div class="output-box" id="output-box">
+            生成的内容将在这里显示...
+        </div>
+    </div>
+
+    <!-- 引入本地 Bootstrap JS 文件 -->
+    <script src="{{ url_for('static', filename='bootstrap-3.3.5/js/bootstrap.min.js') }}"></script>
+
+    <script>
+        // 页面加载时获取用户ID列表并填充下拉框
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/get_portraits')  // 获取所有用户信息的后端路由
+                .then(response => response.json())
+                .then(data => {
+                    const userSelect = document.getElementById('user');
+                    data.forEach(user => {
+                        const option = document.createElement('option');
+                        option.value = user.id;  // 使用用户ID作为值
+                        option.textContent = user.name;  // 显示用户的名字
+                        userSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        // 生成文本按钮点击事件
+        document.getElementById('generate-btn').addEventListener('click', function() {
+            // 获取输入的值
+            const generationType = document.getElementById('generation-type').value;
+            const emotion = document.getElementById('emotion').value;
+            const theme = document.getElementById('theme').value;
+            const user = document.getElementById('user').value;  // 获取下拉框中选中的用户ID
+
+            // 发送POST请求到后端
+            fetch('/generate_text', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    generation_type: parseInt(generationType),
+                    emotion: emotion,
+                    theme: theme,
+                    user: parseInt(user)  // 传递选中的用户ID
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // 显示生成的内容
+                document.getElementById('output-box').textContent = data.generated_text;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>

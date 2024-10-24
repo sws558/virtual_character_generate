@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人物画像生成器</title>
+
+    <!-- 引入 Bootstrap CSS 文件 -->
+    <link href="{{ url_for('static', filename='bootstrap-3.3.5/css/bootstrap.min.css') }}" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        .form-section {
+            margin-bottom: 20px;
+        }
+
+        .output-box {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            margin-top: 20px;
+            height: 150px;
+            overflow-y: auto;
+        }
+
+        .btn-custom {
+            margin-top: 10px;
+        }
+
+        .portrait-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-bottom: 1px solid #dee2e6;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="text-center">人物画像生成器</h1>
+
+        <div class="row form-section">
+            <!-- 输入人数 -->
+            <div class="col-md-6">
+                <label for="num-people" class="form-label">人数</label>
+                <input type="number" id="num-people" class="form-control" placeholder="输入人数...">
+            </div>
+
+            <!-- 输入国籍 -->
+            <div class="col-md-6">
+                <label for="nationality" class="form-label">国籍</label>
+                <input type="text" id="nationality" class="form-control" placeholder="输入国籍...">
+            </div>
+        </div>
+
+        <!-- 生成按钮 -->
+        <button class="btn btn-primary w-100 btn-custom" id="generate-btn">生成人物画像</button>
+
+        <!-- 保存到数据库按钮 -->
+        <button class="btn btn-success w-100 btn-custom" id="save-btn">保存到数据库</button>
+
+        <!-- 输出框 -->
+        <div class="output-box" id="output-box">
+            生成的内容将在这里显示...
+        </div>
+    </div>
+
+    <!-- 引入本地 Bootstrap JS 文件 -->
+    <script src="{{ url_for('static', filename='bootstrap-3.3.5/js/bootstrap.min.js') }}"></script>
+
+    <script>
+        let generatedPortraits = [];
+
+        document.getElementById('generate-btn').addEventListener('click', function() {
+            // 获取输入的值
+            const numPeople = document.getElementById('num-people').value;
+            const nationality = document.getElementById('nationality').value;
+
+            // 发送POST请求到后端
+            fetch('/generate_portrait', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    num_people: parseInt(numPeople),
+                    nationality: nationality
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // 清空之前的输出内容
+                const outputBox = document.getElementById('output-box');
+                outputBox.innerHTML = '';
+
+                generatedPortraits = data.portraits;  // 保存生成的画像以供后续保存到数据库使用
+
+                // 循环处理每个人物画像
+                data.portraits.forEach(portrait => {
+                    const item = document.createElement('div');
+                    item.classList.add('portrait-item');
+                    item.innerHTML = `
+                        <strong>姓名:</strong> ${portrait.name} <br>
+                        <strong>年龄:</strong> ${portrait.age} <br>
+                        <strong>性别:</strong> ${portrait.gender} <br>
+                        <strong>国籍:</strong> ${portrait.nationality} <br>
+                        <strong>行为序列:</strong> ${portrait.behavior}
+                    `;
+                    outputBox.appendChild(item);
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        // 保存到数据库按钮点击事件
+        document.getElementById('save-btn').addEventListener('click', function() {
+            // 发送生成的人物画像到后端保存到数据库
+            fetch('/save_portrait', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    portraits: generatedPortraits
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);  // 提示保存成功
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>

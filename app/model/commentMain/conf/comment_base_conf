@@ -1,0 +1,43 @@
+[int]
+src_max_len = 512
+trg_max_len = 36
+n_heads = 12
+d_model = 768
+d_ff = 3072
+n_enc_layers = 12
+n_dec_layers = 12
+src_vocab_size = 23000
+trg_vocab_size = 23000
+max_decode_steps = 36
+beam_size = 3
+
+[float]
+gamma = 0.65
+#repetition_penalty = 1
+temperature = 1
+
+#repetition_penalty = 2
+#top_k = 40
+#top_p = 0.75
+
+[str]
+src_vocab = model/vocab/zh_vocab.txt
+trg_vocab = model/vocab/zh_vocab.txt
+#search_strategy = sample
+search_strategy = beam_search
+src_tokenizer = mimix
+trg_tokenizer = mimix
+activation = gelu_new
+model = transformer
+task = enc_dec
+load_model = model/comment/comment.base.model
+
+[bool]
+#use_cuda = True
+use_cuda = False
+share_src_trg_emb = True
+share_emb_out_proj = True
+scale_embedding = False
+norm_before_pred = True
+use_output_bias = True
+use_pre_norm = True

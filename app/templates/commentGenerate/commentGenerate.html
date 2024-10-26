@@ -25,9 +25,9 @@
             padding: 15px;
             border: 1px solid #dee2e6;
             border-radius: 5px;
-            font-size: 0.9rem;
+            font-size: 17.6px;
             margin-top: 20px;
-            height: 150px;
+            height: 280px;
             overflow-y: auto;
         }
 
@@ -45,8 +45,8 @@
         <!-- 热点新闻展示 -->
         <div class="row form-section">
             <div class="col-md-12">
-                <h3>热点新闻</h3>
-                <button class="btn btn-info" id="fetch-hot-news-btn">爬取热点新闻</button>
+<!--                <h3>热点新闻</h3>-->
+                <button class="btn btn-info" id="fetch-hot-news-btn">热点内容获取</button>
                 <div class="output-box" id="hot-news-box">
                     热点新闻将在这里显示...
                 </div>
@@ -56,9 +56,9 @@
         <!-- 评论生成 -->
         <div class="row form-section">
             <div class="col-md-12">
-                <button class="btn btn-primary w-100 btn-custom" id="generate-comment-btn">生成评论</button>
+                <button class="btn btn-primary w-100 btn-custom" id="generate-comment-btn">交互内容生成</button>
                 <div class="output-box" id="comment-box">
-                    生成的评论将在这里显示...
+                    生成的交互内容将在这里显示...
                 </div>
             </div>
         </div>
@@ -87,7 +87,8 @@
                 .then(response => response.json())
                 .then(data => {
                     // 显示生成的评论
-                    document.getElementById('comment-box').textContent = data.comment;
+                    // document.getElementById('comment-box').textContent = data.comment;
+                    document.getElementById('comment-box').innerHTML = data.comment.join('<br>');
                 })
                 .catch(error => {
                     console.error('Error:', error);

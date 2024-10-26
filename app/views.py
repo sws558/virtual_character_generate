@@ -1,4 +1,3 @@
-
 import os
 
 from flask import (flash, redirect, render_template, request,
@@ -6,7 +5,9 @@ from flask import (flash, redirect, render_template, request,
 from app import app
 from flask import Flask, render_template, send_file,jsonify
 from flask_sqlalchemy import SQLAlchemy
-
+from app.model.commentMain.mergeHot import gen_comment
+from app.model.commentMain.mergeHot import merge_event
+from app.model.commentMain.mergeHot import chat_comment
 
 
 
@@ -158,18 +159,38 @@ def commentGenerate():
 def fetch_hot_news():
     # 这里可以实现爬虫逻辑来获取实时的热点新闻
     # 目前是模拟热点新闻
-    return jsonify({'hot_news': hot_news_list})
+    num = 20
+    # https://weibo.com/hot/search
+    cookie = "SCF=AobOS93b8R0367Y0xwjM6WQ8nvIO5ARwHGiPbTj3LnubAkYMNqidqEprD_6kq1032UzBLJVhib13UnW7Cb2-AdE.; SINAGLOBAL=2330144313882.294.1724727097129; UOR=,,www.google.com; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WhMr3Win2kvud5VMOjpIORF5JpX5KMhUgL.FoMESh.ce0efS0z2dJLoIEXLxKBLB.eLBo2LxK-L12qLB-qLxK-L12qL1hnLxKqL1hML1hzLxKBLB.2L1hqt; ULV=1728616292918:6:1:1:1813712024768.559.1728616292857:1725417926685; ALF=1731943156; SUB=_2A25KF72kDeRhGeFM71sX8y3JzD6IHXVpbL9srDV8PUJbkNB-LXnukW1NQN51gyt83eTDhys4TMsFc8FwGaJd2qpa; XSRF-TOKEN=2v1pnrRVvOFH8OTSgi90-AwG; WBPSESS=gjySmkdJtQeQkiLbjmJIjrH8jDoOUi22PfFStfGbCRBixVfnaGSALAWuQGWe6htvAHamMRjd76jFJqMAUUHznQ3N8qD-YB5wwF-8LqgStK5W-LPf6dnY3nf2a2VEBb3jZHtbnYQGQXLTQGuoPZPPyQ=="
+    results = merge_event(num, cookie)
+    # 将每个子列表转换为所需的格式
+    formatted_results = [
+        [f"{i + 1}. {sublist[0]} {sublist[1]} 链接：{sublist[2]} 内容：{sublist[3]}"] for i, sublist in enumerate(results)
+    ]
+    formatted_results.append([])
+    formatted_results.append(["数据已保存到 weibo_hot_search.xlsx"])
+
+    # 输出结果
+    return jsonify({'hot_news': formatted_results})
 
 
 # 生成评论接口
 @app.route('/generate_comment', methods=['GET'])
 def generate_comment():
     # 生成一个静态评论
-    static_comment = "这真是一个非常有趣的热点，大家对此议论纷纷，值得关注！"
+    # static_comment = "这真是一个非常有趣的热点，大家对此议论纷纷，值得关注！"
 
+    num = 2
+    # https://weibo.com/hot/search
+    cookie = "SCF=AobOS93b8R0367Y0xwjM6WQ8nvIO5ARwHGiPbTj3LnubAkYMNqidqEprD_6kq1032UzBLJVhib13UnW7Cb2-AdE.; SINAGLOBAL=2330144313882.294.1724727097129; UOR=,,www.google.com; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WhMr3Win2kvud5VMOjpIORF5JpX5KMhUgL.FoMESh.ce0efS0z2dJLoIEXLxKBLB.eLBo2LxK-L12qLB-qLxK-L12qL1hnLxKqL1hML1hzLxKBLB.2L1hqt; ULV=1728616292918:6:1:1:1813712024768.559.1728616292857:1725417926685; ALF=1731943156; SUB=_2A25KF72kDeRhGeFM71sX8y3JzD6IHXVpbL9srDV8PUJbkNB-LXnukW1NQN51gyt83eTDhys4TMsFc8FwGaJd2qpa; XSRF-TOKEN=2v1pnrRVvOFH8OTSgi90-AwG; WBPSESS=gjySmkdJtQeQkiLbjmJIjrH8jDoOUi22PfFStfGbCRBixVfnaGSALAWuQGWe6htvAHamMRjd76jFJqMAUUHznQ3N8qD-YB5wwF-8LqgStK5W-LPf6dnY3nf2a2VEBb3jZHtbnYQGQXLTQGuoPZPPyQ=="
+    res = gen_comment(num, cookie)
+    print(res)
+    # 将每个子列表转换为所需的格式
+    for_results = [
+        [f"{i + 1}. {sublist[1]}"] for i, sublist in enumerate(res)
+    ]
     # 返回生成的评论
-    return jsonify({'comment': static_comment})
-
+    return jsonify({'comment': for_results})
 
 
 

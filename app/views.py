@@ -6,7 +6,7 @@ from flask import (flash, redirect, render_template, request,
 from app import app
 from flask import Flask, render_template, send_file,jsonify
 from flask_sqlalchemy import SQLAlchemy
-
+import random
 
 
 
@@ -183,23 +183,86 @@ def behaviorGenerate():
     return render_template('./behaviorGenerate/behaviorGenerate.html')
 
 # 接收前端请求并返回生成的行为序列
+
+apt_groups = {
+    "APT-28": "俄罗斯",
+    "APT-34": "伊朗",
+    "APT-36": "巴基斯坦",
+    "APT-C-36": "哥伦比亚",
+    "APT-C-37": "朝鲜",
+    "APT-C-56": "南亚某国",
+    "APT-29": "俄罗斯",
+    "APT-35": "伊朗",
+    "Dark Pink APT": "未知",
+    "Gamaredon": "俄罗斯",
+    "Kimsuky APT": "朝鲜",
+    "Lazarus APT": "朝鲜",
+    "Lorec53": "白俄罗斯",
+    "Nortrom_Lion": "南亚某国",
+    "Tick": "未知",
+    "TraderTraitor": "朝鲜",
+    "UNC2970": "未知"
+}
+
+
 @app.route('/generate_behavior_sequence', methods=['POST'])
 def generate_behavior_sequence():
-    # 获取前端传递的 JSON 数据
-    data = request.get_json()
-    user_id = data.get('user_id')
-    portrait = Portrait.query.filter_by(id=user_id).first()
-    if portrait:
-        # 打印该用户的所有信息
-        print(f"用户ID: {portrait.id}, 名字: {portrait.name}, 年龄: {portrait.age}, 性别: {portrait.gender}, 国籍: {portrait.nationality}, 行为序列: {portrait.behavior}")
+    try:
+        # 获取前端传递的 JSON 数据
+        data = request.get_json()
+        if not data or 'user_id' not in data:
+            return jsonify({'error': '需要提供用户ID'}), 400
 
-    # 模拟生成的行为序列
-    behavior_sequence1 = f"用户 {user_id} 的行为序列：走路 -> 跑步 -> 跳跃 -> 休息。"
-    with open('app/1.txt', 'r', encoding='utf-8') as file:
-        behavior_sequence = file.read()
-    behavior_sequence_html = behavior_sequence.replace('\n', '<br>')
-    # 返回生成的行为序列
-    return jsonify({'behavior_sequence': behavior_sequence_html})
+        user_id = data.get('user_id')
+        portrait = Portrait.query.filter_by(id=user_id).first()
+        if not portrait:
+            return jsonify({'error': '用户未找到'}), 404
+
+        # 获取用户的国籍
+        nationality = portrait.nationality
+
+        # 根据用户的国籍查找对应的APT组
+        matching_groups = [group for group, country in apt_groups.items() if country == nationality]
+
+        if matching_groups:
+            # 如果找到匹配的APT组，随机选择一个
+            selected_group = random.choice(matching_groups)
+        else:
+            # 如果没有找到匹配的APT组，则从所有APT组中随机选择一个
+            selected_group = random.choice(list(apt_groups.keys()))
+
+        # 构建APT组文件夹路径
+        directory_path = f'app/data/{selected_group}'
+
+        # 检查目录是否存在并获取其中所有txt文件
+        if os.path.exists(directory_path):
+            txt_files = [f for f in os.listdir(directory_path) if f.endswith('.txt')]
+            if txt_files:
+                # 随机选择一个txt文件
+                selected_file = random.choice(txt_files)
+                file_path = os.path.join(directory_path, selected_file)
+
+                # 读取文件内容
+                try:
+                    with open(file_path, 'r', encoding='utf-8') as file:
+                        behavior_sequence = file.read()
+                except FileNotFoundError:
+                    return jsonify({'error': f'文件未找到: {file_path}'}), 500
+
+                # 将行为序列转换为HTML格式
+                behavior_sequence_html = behavior_sequence.replace('\n', '<br>')
+
+                # 返回生成的行为序列
+                return jsonify({'behavior_sequence': behavior_sequence_html})
+            else:
+                return jsonify({'error': f'目录中没有找到txt文件: {directory_path}'}), 500
+        else:
+            return jsonify({'error': f'目录未找到: {directory_path}'}), 500
+
+    except Exception as e:
+        # 捕获任何未预料的错误
+        app.logger.error(f"发生错误: {e}")
+        return jsonify({'error': '内部错误'}), 500
 
 # 获取所有用户信息，并返回给前端下拉框
 @app.route('/get_users', methods=['GET'])

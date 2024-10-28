@@ -1,4 +1,3 @@
-
 import os
 
 from flask import (flash, redirect, render_template, request,
@@ -6,7 +5,10 @@ from flask import (flash, redirect, render_template, request,
 from app import app
 from flask import Flask, render_template, send_file,jsonify
 from flask_sqlalchemy import SQLAlchemy
-import random
+from generate import generate
+from app.model.commentMain.mergeHot import gen_comment
+from app.model.commentMain.mergeHot import merge_event
+from app.model.commentMain.mergeHot import chat_comment
 
 
 
@@ -122,15 +124,18 @@ def generate_text():
     emotion = data.get('emotion')
     theme = data.get('theme')
     user = data.get('user')
-    user_id = data.get('user')
-    portrait = Portrait.query.filter_by(id=user).first()
-    print(portrait.nationality)
-    
-    # 根据传递的参数生成文本
-    generated_text = f"类型: {generation_type}, 情感: {emotion}, 主题: {theme}, 用户ID: {user} 的生成内容。"
 
-    # 返回 JSON 数据给前端
-    return jsonify({'generated_text': generated_text})
+    if generation_type == 1:
+        # 纯文本生成逻辑
+        generated_text = generate(img=1,user=user, topic=theme,emtion=emotion)
+        return jsonify({'generated_text': generated_text, 'generated_image': None})
+    elif generation_type == 2:
+        # 图文生成逻辑
+        generated_text= generate(img=2,user=user, topic=theme,emtion=emotion)
+        generated_image = url_for('static', filename='images/img.jpg')  # 模拟生成的图片路径
+        return jsonify({'generated_text': generated_text, 'generated_image': generated_image})
+    else:
+        return jsonify({'generated_text': '无效的生成类型', 'generated_image': None})
 
 
 
@@ -158,18 +163,38 @@ def commentGenerate():
 def fetch_hot_news():
     # 这里可以实现爬虫逻辑来获取实时的热点新闻
     # 目前是模拟热点新闻
-    return jsonify({'hot_news': hot_news_list})
+    num = 20
+    # https://weibo.com/hot/search
+    cookie = "XSRF-TOKEN=MPohwuIfRPQ_vbHhJyAy7Ann; SCF=AnNovNcs2SOCtWCVMEc1CJDtvcdMCXGs7DVIX72YCLpdpJWntxwVKjOGLx_Lamn5Yp0UrTwYKxZNwCE88hpsYqU.; SUB=_2A25KGepeDeRhGeFH6FoV8ibKzDiIHXVpV2OWrDV8PUNbmtANLXf7kW9Ne0Aw6hbHXvNZidxSFQO4MocU0EJQIP10; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WWMm3Tr_kFV-IHzgH.qfOz25NHD95QN1KeRShzRSoMXWs4DqcjMi--NiK.Xi-2Ri--ciKnRi-zNS0.01hBE1hqNS5tt; ALF=02_1732585230; WBPSESS=3vGUpv7XYTOBkrYlADu3Qc6kkBhYeIbEQhI7OxYUgxdnVv_l5jG-8NEiDxtjYC8mOaAx08OEFDokdCmIqCNU5a206jQ3ItB98grEBb_lrqNd2gSDGt5RK9jAsv1m76kL-DOWLI6LpmqUThkcSVnlBw=="
+    results = merge_event(num, cookie)
+    # 将每个子列表转换为所需的格式
+    formatted_results = [
+        [f"{i + 1}. {sublist[0]} {sublist[1]} 链接：{sublist[2]} 内容：{sublist[3]}"] for i, sublist in enumerate(results)
+    ]
+    formatted_results.append([])
+    formatted_results.append(["数据已保存到 weibo_hot_search.xlsx"])
+
+    # 输出结果
+    return jsonify({'hot_news': formatted_results})
 
 
 # 生成评论接口
 @app.route('/generate_comment', methods=['GET'])
 def generate_comment():
     # 生成一个静态评论
-    static_comment = "这真是一个非常有趣的热点，大家对此议论纷纷，值得关注！"
+    # static_comment = "这真是一个非常有趣的热点，大家对此议论纷纷，值得关注！"
 
+    num = 2
+    # https://weibo.com/hot/search
+    cookie = "XSRF-TOKEN=MPohwuIfRPQ_vbHhJyAy7Ann; SCF=AnNovNcs2SOCtWCVMEc1CJDtvcdMCXGs7DVIX72YCLpdpJWntxwVKjOGLx_Lamn5Yp0UrTwYKxZNwCE88hpsYqU.; SUB=_2A25KGepeDeRhGeFH6FoV8ibKzDiIHXVpV2OWrDV8PUNbmtANLXf7kW9Ne0Aw6hbHXvNZidxSFQO4MocU0EJQIP10; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WWMm3Tr_kFV-IHzgH.qfOz25NHD95QN1KeRShzRSoMXWs4DqcjMi--NiK.Xi-2Ri--ciKnRi-zNS0.01hBE1hqNS5tt; ALF=02_1732585230; WBPSESS=3vGUpv7XYTOBkrYlADu3Qc6kkBhYeIbEQhI7OxYUgxdnVv_l5jG-8NEiDxtjYC8mOaAx08OEFDokdCmIqCNU5a206jQ3ItB98grEBb_lrqNd2gSDGt5RK9jAsv1m76kL-DOWLI6LpmqUThkcSVnlBw=="
+    res = gen_comment(num, cookie)
+    print(res)
+    # 将每个子列表转换为所需的格式
+    for_results = [
+        [f"{i + 1}. {sublist[1]}"] for i, sublist in enumerate(res)
+    ]
     # 返回生成的评论
-    return jsonify({'comment': static_comment})
-
+    return jsonify({'comment': for_results})
 
 
 
@@ -183,86 +208,24 @@ def behaviorGenerate():
     return render_template('./behaviorGenerate/behaviorGenerate.html')
 
 # 接收前端请求并返回生成的行为序列
-
-apt_groups = {
-    "APT-28": "俄罗斯",
-    "APT-34": "伊朗",
-    "APT-36": "巴基斯坦",
-    "APT-C-36": "哥伦比亚",
-    "APT-C-37": "朝鲜",
-    "APT-C-56": "南亚某国",
-    "APT-29": "俄罗斯",
-    "APT-35": "伊朗",
-    "Dark Pink APT": "未知",
-    "Gamaredon": "俄罗斯",
-    "Kimsuky APT": "朝鲜",
-    "Lazarus APT": "朝鲜",
-    "Lorec53": "白俄罗斯",
-    "Nortrom_Lion": "南亚某国",
-    "Tick": "未知",
-    "TraderTraitor": "朝鲜",
-    "UNC2970": "未知"
-}
-
-
 @app.route('/generate_behavior_sequence', methods=['POST'])
 def generate_behavior_sequence():
-    try:
-        # 获取前端传递的 JSON 数据
-        data = request.get_json()
-        if not data or 'user_id' not in data:
-            return jsonify({'error': '需要提供用户ID'}), 400
+    # 获取前端传递的 JSON 数据
+    data = request.get_json()
+    user_id = data.get('user_id')
+    portrait = Portrait.query.filter_by(id=user_id).first()
+    if portrait:
+        # 打印该用户的所有信息
+        print(
+            f"用户ID: {portrait.id}, 名字: {portrait.name}, 年龄: {portrait.age}, 性别: {portrait.gender}, 国籍: {portrait.nationality}, 行为序列: {portrait.behavior}")
 
-        user_id = data.get('user_id')
-        portrait = Portrait.query.filter_by(id=user_id).first()
-        if not portrait:
-            return jsonify({'error': '用户未找到'}), 404
-
-        # 获取用户的国籍
-        nationality = portrait.nationality
-
-        # 根据用户的国籍查找对应的APT组
-        matching_groups = [group for group, country in apt_groups.items() if country == nationality]
-
-        if matching_groups:
-            # 如果找到匹配的APT组，随机选择一个
-            selected_group = random.choice(matching_groups)
-        else:
-            # 如果没有找到匹配的APT组，则从所有APT组中随机选择一个
-            selected_group = random.choice(list(apt_groups.keys()))
-
-        # 构建APT组文件夹路径
-        directory_path = f'app/data/{selected_group}'
-
-        # 检查目录是否存在并获取其中所有txt文件
-        if os.path.exists(directory_path):
-            txt_files = [f for f in os.listdir(directory_path) if f.endswith('.txt')]
-            if txt_files:
-                # 随机选择一个txt文件
-                selected_file = random.choice(txt_files)
-                file_path = os.path.join(directory_path, selected_file)
-
-                # 读取文件内容
-                try:
-                    with open(file_path, 'r', encoding='utf-8') as file:
-                        behavior_sequence = file.read()
-                except FileNotFoundError:
-                    return jsonify({'error': f'文件未找到: {file_path}'}), 500
-
-                # 将行为序列转换为HTML格式
-                behavior_sequence_html = behavior_sequence.replace('\n', '<br>')
-
-                # 返回生成的行为序列
-                return jsonify({'behavior_sequence': behavior_sequence_html})
-            else:
-                return jsonify({'error': f'目录中没有找到txt文件: {directory_path}'}), 500
-        else:
-            return jsonify({'error': f'目录未找到: {directory_path}'}), 500
-
-    except Exception as e:
-        # 捕获任何未预料的错误
-        app.logger.error(f"发生错误: {e}")
-        return jsonify({'error': '内部错误'}), 500
+    # 模拟生成的行为序列
+    behavior_sequence1 = f"用户 {user_id} 的行为序列：走路 -> 跑步 -> 跳跃 -> 休息。"
+    with open('app/1.txt', 'r', encoding='utf-8') as file:
+        behavior_sequence = file.read()
+    behavior_sequence_html = behavior_sequence.replace('\n', '<br>')
+    # 返回生成的行为序列
+    return jsonify({'behavior_sequence': behavior_sequence_html})
 
 # 获取所有用户信息，并返回给前端下拉框
 @app.route('/get_users', methods=['GET'])

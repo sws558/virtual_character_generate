@@ -73,21 +73,12 @@ class prompter(object):
         result = re.sub(r'\[.*?\]', '', result)
         result = re.sub(r'\(.*?\)', '', result)
 
-        # keyword="Response:"
-        # keyword_position = result.find(keyword)
-        # if keyword_position != -1:
-        #     # 获取关键词之前的内容
-        #     result= result[keyword_position+10:]
+        keyword="Response:"
+        keyword_position = result.find(keyword)
+        if keyword_position != -1:
+            # 获取关键词之前的内容
+            result= result[keyword_position+10:]
         print(result)
-            # 将文本内容写入文件
-            # with open(file_path, "w", encoding="utf-8") as file:
-            #     file.write(result)
-        # else:
-        #     print("Style rewriting error, please check the output format.")
-
-        # 将文本内容写入文件
-        # with open(file_path, "w", encoding="utf-8") as file:
-        #     file.write(result)
         return result
 
 def generate_blog(input,style):
@@ -211,10 +202,8 @@ def generate_blog(input,style):
 
     # print("--------input----------")
     # input = "[Job:doctor;hobby:travle;emotion: postive;topic:lose weight]"
-    # instruction="This is your identity information, please Select a message and write a Twitter post. Use a natural tone and style, and avoid overly formal or rigid expressions. Add some common colloquial expressions and emotional words to make sentences closer to human communication."
-    # blog1 = evaluate(instruction,input)
-    blog1 ="I like the taste of sweet potato soup with pork ribs best! It's so delicious that it makes me want to eat more. The meat is tender and juicy, while the potatoes are soft and fragrant. This dish has always been my favorite since childhood. Today, I finally got to enjoy this delicacy again. Haha~I'm really happy now. #Sweet Potato Soup"
-    # blog1 ="Please pay attention to safety when running at night! Don't run on the road without lights, don't wear dark clothes, and be careful of cars passing by. If you encounter any unsafe situations while exercising, call the police immediately for help."
+    instruction="This is your identity information, please Select a message and write a Twitter post. Use a natural tone and style, and avoid overly formal or rigid expressions. Add some common colloquial expressions and emotional words to make sentences closer to human communication."
+    blog1 = evaluate(instruction,input)
     input_style ="Context:"+blog1
     instruction_style="Task:Rewrite the sentence style without changing the content of the sentence.The target style:"+style+". Let's think about it step by step. First, describe the style. Then, describe the language pattern of this style. Finally, output the rewritten sentence without explanation."
     blog2 = evaluate(instruction_style,input_style,temperature=0.2,top_p=0.75,top_k=40,repetition_penalty=1.1)

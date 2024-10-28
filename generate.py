@@ -2,6 +2,7 @@ import pymysql
 import torch
 import json
 import re
+import shutil
 import argparse
 import os
 from transformers import AutoTokenizer, AutoModelForCausalLM, HfArgumentParser, GenerationConfig
@@ -71,6 +72,7 @@ def download_picture(html,file_path):
     except:
         traceback.print_exc()
         print('【错误】当前图片无法下载')
+    return path + '.jpg'
 
 def get_input(nikename,topic,emtion):
     #读取数据库得到用户信息
@@ -84,7 +86,7 @@ def get_input(nikename,topic,emtion):
 
     # 创建游标并执行查询
     cursor = db.cursor()
-    columns = ["job_title", "hobbies", "text_style"]  # 要查询的列名列表
+    columns = ["job_title", "hobbies", "Tones_and_emotion"]  # 要查询的列名列表
     columns_str = ", ".join(columns)  # 将列名组合成字符串
     # SQL 查询，查找特定元素
     query = f"SELECT {columns_str} FROM person_output WHERE nikename = %s"
@@ -96,7 +98,7 @@ def get_input(nikename,topic,emtion):
     #整理成输入提示
     job = result[0].strip()  # 去掉前后的空格
     hobbies = result[1].strip()  # 去掉前后的空格
-    text_style = result[2].strip()
+    Tones_and_emotion = result[2].strip()
 
     hobby_list = hobbies.split(",")  # 以逗号分隔多个兴趣爱好
     hobby_list = [h.replace('and', '').strip() for h in hobby_list]
@@ -104,11 +106,11 @@ def get_input(nikename,topic,emtion):
     target_hobby = random.choice(hobby_list)
     input = f'[job:{job};hobby:{target_hobby};topic:{topic};emotion:{emtion}]'
     print(input)
-    return input,text_style
+    return input,Tones_and_emotion
 
-def main(img,user,topic,emtion):
+def generate(img,user,topic,emtion):
     # 根据参数调用不同的函数
-    input, style = get_input(user, topic, emtion)
+    input, style = get_input(user, topic, emtion)#
     blog = generate_blog(input, style)
     direction_path = create_directory_and_file(user, topic, emtion)
     # 在用户目录下创建文件 blog.txt
@@ -116,14 +118,30 @@ def main(img,user,topic,emtion):
     file_path = os.path.join(direction_path, file_name)
     with open(file_path, "w", encoding="utf-8") as file:
         file.write(blog)
-
-    if img:
+    if img == 1:
+        return blog
+    if img == 2:
+        dst_path = "./app/static/images/img.jpg"
         html = generate_img(blog)
-        download_picture(html, direction_path)
+        image_path = download_picture(html, direction_path)
+        print(image_path)
         print(f"image written and saved to blog")
+        if not os.path.exists(image_path):
+            print(f"源文件 {image_path} 不存在")
+            return blog
 
+            # 检查目标文件夹是否存在，如果不存在则创建
+        dst_folder = os.path.dirname(dst_path)
+        if not os.path.exists(dst_folder):
+            os.makedirs(dst_folder)
+        # 复制文件
+        try:
+            shutil.copy(image_path, dst_path)
+            print(f"图片已成功从 {image_path} 复制到 {dst_path}")
+        except Exception as e:
+            print(f"复制文件时出错: {e}")
 
-#传入参数，触发文本生成和评论生成
+        return blog
 
-main(img=False,user="平安北京朝阳", topic="Hometown",emtion="Pride")  # 将会生成文本 Moyan Style News Style Trump Style
+# generate_blog1,generate_img1=generate(img=2,user="平安北京朝阳", topic="Hometown",emtion="Pride",style="Moyan Style")  # 将会生成文本  News Style Trump Style
 

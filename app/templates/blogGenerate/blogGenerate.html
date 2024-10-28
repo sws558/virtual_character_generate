@@ -26,12 +26,19 @@
             border-radius: 5px;
             font-size: 0.9rem;
             margin-top: 20px;
-            height: 150px;
+            height: auto;
             overflow-y: auto;
         }
 
         .btn-custom {
             margin-top: 10px;
+        }
+
+        .output-image {
+            max-width: 100%;
+            height: auto;
+            margin-top: 15px;
+            display: block;
         }
     </style>
 </head>
@@ -78,7 +85,8 @@
 
         <!-- 输出框 -->
         <div class="output-box" id="output-box">
-            生成的内容将在这里显示...
+            <div id="generated-text">生成的内容将在这里显示...</div>
+            <img id="generated-image" class="output-image" style="display: none;">
         </div>
     </div>
 
@@ -126,7 +134,15 @@
             .then(response => response.json())
             .then(data => {
                 // 显示生成的内容
-                document.getElementById('output-box').textContent = data.generated_text;
+                document.getElementById('generated-text').textContent = data.generated_text;
+                const generatedImage = document.getElementById('generated-image');
+
+                if (data.generated_image) {
+                    generatedImage.src = data.generated_image;
+                    generatedImage.style.display = 'block';
+                } else {
+                    generatedImage.style.display = 'none';
+                }
             })
             .catch(error => {
                 console.error('Error:', error);

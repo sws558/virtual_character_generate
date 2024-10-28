@@ -1,0 +1,6 @@
+{
+    "description": "Template used by FTrainer.",
+    "prompt_input": "### Demand:{instruction}\n{input}\n### Output: ",
+    "prompt_no_input": "### Demand:{instruction}\n### Output: ",
+    "response_split": "### Output:"
+}

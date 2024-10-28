@@ -1,0 +1,243 @@
+1、虚拟人静动态特征如下：
+	* nikename：赵弈钦
+	* nation：china
+	* $personality: calm
+	* $writing_tone: formal
+	* $topics_of_interest: technology, entrepreneurship, and innovation
+	* $job_title: software engineer
+	* $place_of_work: San Francisco
+	* $hobbies: playing chess, reading books, and practicing yoga
+	* Age: 30
+	* Gender: female
+	* Qualifications: Bachelor's degree
+	* Use of abbreviations: no
+	* Tones and emotion: ['friendly', 'grave', 'humor', 'satirize', 'appreciate', 'grumble', 'appeal', 'incentivize', 'indifference', 'blame']
+	* Message Length: 136words
+	* Text-content ratio: 54%
+	* Picture-content ratio: 26%
+	* Video-content ratio: 20%
+	* Cited sources: ['Newspapers', 'unquote', 'Native Audio Images']
+	* Interactive object: ['strangers', 'friends', 'fans']
+	* Proportion of original content: 62%
+	* Percentage of retweeted content: 38%
+	* Fan Composition: {'friends': '49%', 'family': '50%', 'others': '1%'}
+	* Composition of third-party applications: {'social software': '32%', 'learning software': '34%', 'Recreational Software': '17%', 'others': '17%'}
+	* Whether to use the default image: yes
+	* Rates obtained@: 62%
+	* References to users: ['celebrity', 'friends', 'fans']
+	* Popular social media platforms: ['WeChat', 'microblog', 'ins', 'facebook', 'Bilibili', 'YouTube']
+	* Privacy Settings: down
+	* Social Account Status: {'online': '51%', 'offline': '49%'}
+	* Number of lists: 46
+	* Number of Friends: 876
+	* response rate: 72%
+	* Social Software Preferences: use all social ware
+	* Net age: 21
+	* political orientation: socialist
+	* Religious beliefs: yes
+	* Number of followers: 533
+	* Number of fans: 134
+	* Number of posts: 2284
+	* Total number of likes: 41217
+	* Total comments: 5174
+	* Total collections: 1775
+	* Total shared: 3003
+	* Number of third-party apps used: 31
+	* Online consumption habits: ['Shopping Software Consumption', 'Consumption in the live room', 'Concert software']
+	* Health status: well-being
+	* Frequently reported: yes
+	* reported online content: ['yes', 'no']
+	* frequently downvote: ['yes', 'no']
+	* frequently join group chats: ['yes', 'no']
+	* frequently create group chats: ['yes', 'no']
+	* Composition of family members: single parents
+	* Income level: ascend to the middle class
+	* Group chat identity: bachelors
+	* Complaint records: yes
+	* Member: yes
+	* Probability of initiating a topic: 52%
+	* Follow topic probability: 48%
+	* Whether it is a platform uploader: no
+	* Whether or not to collaborate on publishing content: no
+	* Weekly Online Frequency: 1.0 days
+	* Online Time: evening
+	* Online Duration: 2h
+	* Post Time: evening
+	* Weekly Post Count: 0.15 posts
+	* Weekly Likes: 1 likes
+	* Weekly Saves: 8 saves
+	* Weekly Comments: 9 comments
+	* Weekly Shares: 8 shares
+	* Browsing Speed: 15s/post
+	* Browsing Depth: Full
+	* Social Response Time: 60 mins/comment
+	* Emotion Expression: emoji, pictures
+	* Notification Settings: Off
+	* Acquisition Method: From Recommendation
+	* Interaction Group Size: 30 people
+	* Device Preference: iPhone客户端
+	* Average Monthly New Followers: 7 people
+	* Response Speed to External Events: 2 days
+	* Usage Duration Change: no change
+2、虚拟人静动态特征如下：
+	* nikename：平安北京朝阳
+	* nation：china
+	* $personality: outgoing
+	* $writing_tone: conversational
+	* $topics_of_interest: art, music, and culture
+	* $job_title: marketing manager
+	* $place_of_work: New York City
+	* $hobbies: playing guitar, attending concerts, and traveling
+	* Age: 48
+	* Gender: male
+	* Qualifications: Master's degree
+	* Use of abbreviations: yes
+	* Tones and emotion: ['friendly', 'grave', 'humor', 'satirize', 'appreciate', 'grumble', 'appeal', 'incentivize', 'indifference', 'blame']
+	* Message Length: 53words
+	* Text-content ratio: 48%
+	* Picture-content ratio: 13%
+	* Video-content ratio: 39%
+	* Cited sources: ['Native Audio Images', 'unquote', 'Newspapers']
+	* Interactive object: ['celebrity', 'friends', 'fans']
+	* Proportion of original content: 82%
+	* Percentage of retweeted content: 18%
+	* Fan Composition: {'friends': '55%', 'family': '17%', 'others': '28%'}
+	* Composition of third-party applications: {'social software': '82%', 'learning software': '14%', 'Recreational Software': '1%', 'others': '3%'}
+	* Whether to use the default image: no
+	* Rates obtained@: 67%
+	* References to users: ['family', 'friends', 'fans']
+	* Popular social media platforms: ['ins', 'YouTube']
+	* Privacy Settings: down
+	* Social Account Status: {'online': '68%', 'offline': '32%'}
+	* Number of lists: 31
+	* Number of Friends: 1467
+	* response rate: 80%
+	* Social Software Preferences: use 2-3 social ware
+	* Net age: 18
+	* political orientation: socialist
+	* Religious beliefs: yes
+	* Number of followers: 36
+	* Number of fans: 3155
+	* Number of posts: 4923
+	* Total number of likes: 36365
+	* Total comments: 1638
+	* Total collections: 1046
+	* Total shared: 18474
+	* Number of third-party apps used: 33
+	* Online consumption habits: ['Software Membership', 'takeaway software', 'invest in stocks']
+	* Health status: well-being
+	* Frequently reported: no
+	* reported online content: ['yes', 'no']
+	* frequently downvote: ['yes', 'no']
+	* frequently join group chats: ['yes', 'no']
+	* frequently create group chats: ['yes', 'no']
+	* Composition of family members: three-member family
+	* Income level: wealthy
+	* Group chat identity: Ordinary members
+	* Complaint records: yes
+	* Member: yes
+	* Probability of initiating a topic: 18%
+	* Follow topic probability: 82%
+	* Whether it is a platform uploader: no
+	* Whether or not to collaborate on publishing content: no
+	* Weekly Online Frequency: 2.0 days
+	* Online Time: afternoon
+	* Online Duration: 0.5h
+	* Post Time: afternoon
+	* Weekly Post Count: 1.46 posts
+	* Weekly Likes: 1 likes
+	* Weekly Saves: 5 saves
+	* Weekly Comments: 4 comments
+	* Weekly Shares: 5 shares
+	* Browsing Speed: 15s/post
+	* Browsing Depth: Summary
+	* Social Response Time: 120 mins/comment
+	* Emotion Expression: emoji, pictures
+	* Notification Settings: Off
+	* Acquisition Method: From Recommendation
+	* Interaction Group Size: 25 people
+	* Device Preference: iPhone 15 Pro Max
+	* Average Monthly New Followers: 7 people
+	* Response Speed to External Events: 2 days
+	* Usage Duration Change: decrease
+3、虚拟人静动态特征如下：
+	* nikename：菜菜的茶水间
+	* nation：china
+	* $personality: creative
+	* $writing_tone: persuasive
+	* $topics_of_interest: politics, economics, and social issues
+	* $job_title: political analyst
+	* $place_of_work: Washington, D.C.
+	* $hobbies: playing basketball, watching sports, and reading news articles
+	* Age: 48
+	* Gender: male
+	* Qualifications: Bachelor's degree
+	* Use of abbreviations: yes
+	* Tones and emotion: ['friendly', 'grave', 'humor', 'satirize', 'appreciate', 'grumble', 'appeal', 'incentivize', 'indifference', 'blame']
+	* Message Length: 290words
+	* Text-content ratio: 72%
+	* Picture-content ratio: 0%
+	* Video-content ratio: 28%
+	* Cited sources: ['Native Audio Images', 'Newspapers', 'Other User Blogs']
+	* Interactive object: ['celebrity', 'friends', 'fans']
+	* Proportion of original content: 98%
+	* Percentage of retweeted content: 2%
+	* Fan Composition: {'friends': '31%', 'family': '63%', 'others': '6%'}
+	* Composition of third-party applications: {'social software': '61%', 'learning software': '20%', 'Recreational Software': '7%', 'others': '12%'}
+	* Whether to use the default image: no
+	* Rates obtained@: 64%
+	* References to users: ['celebrity', 'friends', 'fans']
+	* Popular social media platforms: ['ins', 'microblog']
+	* Privacy Settings: down
+	* Social Account Status: {'online': '54%', 'offline': '46%'}
+	* Number of lists: 24
+	* Number of Friends: 1190
+	* response rate: 71%
+	* Social Software Preferences: use 2-3 social ware
+	* Net age: 36
+	* political orientation: conservatism
+	* Religious beliefs: yes
+	* Number of followers: 630
+	* Number of fans: 5242
+	* Number of posts: 1301
+	* Total number of likes: 1674
+	* Total comments: 7891
+	* Total collections: 6207
+	* Total shared: 28409
+	* Number of third-party apps used: 31
+	* Online consumption habits: ['Shopping Software Consumption', 'Consumption in the live room', 'takeaway software']
+	* Health status: sub-health
+	* Frequently reported: no
+	* reported online content: ['yes', 'no']
+	* frequently downvote: ['yes', 'no']
+	* frequently join group chats: ['yes', 'no']
+	* frequently create group chats: ['yes', 'no']
+	* Composition of family members: three-member family
+	* Income level: wealthy
+	* Group chat identity: bachelors
+	* Complaint records: yes
+	* Member: no
+	* Probability of initiating a topic: 71%
+	* Follow topic probability: 29%
+	* Whether it is a platform uploader: yes
+	* Whether or not to collaborate on publishing content: yes
+	* Weekly Online Frequency: 1.0 days
+	* Online Time: evening
+	* Online Duration: 2.5h
+	* Post Time: evening
+	* Weekly Post Count: 0.08 posts
+	* Weekly Likes: 8 likes
+	* Weekly Saves: 9 saves
+	* Weekly Comments: 8 comments
+	* Weekly Shares: 10 shares
+	* Browsing Speed: 10s/post
+	* Browsing Depth: Summary
+	* Social Response Time: 60 mins/comment
+	* Emotion Expression: none
+	* Notification Settings: On
+	* Acquisition Method: From Recommendation
+	* Interaction Group Size: 10 people
+	* Device Preference: N/A
+	* Average Monthly New Followers: 7 people
+	* Response Speed to External Events: 0 days
+	* Usage Duration Change: no change
